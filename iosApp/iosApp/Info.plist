@@ -3,18 +3,16 @@
 <plist version="1.0">
     <dict>
         <key>CADisableMinimumFrameDurationOnPhone</key>
-        <true />
+        <true/>
 
         <key>CFBundleDisplayName</key>
         <string>Movie App</string>
 
         <key>UIViewControllerBasedStatusBarAppearance</key>
-        <false />
+        <false/>
 
         <key>TMDB_API_KEY</key>
-        <string>
-            eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYWRmYjY5MTIxNjQ5MTcwMzUxZjA1N2NmM2IyZmNkOSIsIm5iZiI6MTY3NjczNTYwOC4wODYwMDAyLCJzdWIiOiI2M2YwZjQ3ODUyNDk3ODAwOGVmZDEwODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ojOd4GTtCF9heC_FR2eGu_7QGTKHlAE3qR85oFYNGQc
-        </string>
+        <string>eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYWRmYjY5MTIxNjQ5MTcwMzUxZjA1N2NmM2IyZmNkOSIsIm5iZiI6MTY3NjczNTYwOC4wODYwMDAyLCJzdWIiOiI2M2YwZjQ3ODUyNDk3ODAwOGVmZDEwODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ojOd4GTtCF9heC_FR2eGu_7QGTKHlAE3qR85oFYNGQc</string>
     </dict>
 </plist>
 

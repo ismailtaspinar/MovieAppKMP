@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ismailtaspinar.movieAppKmp.data.model.Movie
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
+import com.ismailtaspinar.movieAppKmp.utils.extension.formatToOneDecimal
 import io.kamel.core.config.KamelConfig
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -95,7 +96,6 @@ fun MovieCard(
         interactionSource = remember { MutableInteractionSource() }
     ) {
         Column {
-            // Poster Image with Gradient Overlay
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -139,7 +139,6 @@ fun MovieCard(
                     )
                 }
 
-                // Gradient overlay for rating
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -154,7 +153,6 @@ fun MovieCard(
                         )
                 )
 
-                // Rating Badge
                 Surface(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -164,7 +162,7 @@ fun MovieCard(
                     shadowElevation = 4.dp
                 ) {
                     Text(
-                        text = "⭐ ${movie.vote_average}",
+                        text = "⭐ ${movie.vote_average?.formatToOneDecimal()}",
                         color = AppColors.onPrimary,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
