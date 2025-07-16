@@ -57,20 +57,32 @@ import com.ismailtaspinar.movieAppKmp.data.model.Movie
 import com.ismailtaspinar.movieAppKmp.navigation.LocalNavigator
 import com.ismailtaspinar.movieAppKmp.ui.components.imageLoad.KamelAsyncImage
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
+import com.ismailtaspinar.movieAppKmp.ui.viewModel.MovieDetailUiState
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.MovieDetailViewModel
 import com.ismailtaspinar.movieAppKmp.utils.extension.formatToOneDecimal
 import moe.tlaster.precompose.viewmodel.viewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@Preview
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailScreen(
-    movieId: Int = 0,
-) {
+fun MovieDetailScreen(movieId: Int = 0) {
     val navigator = LocalNavigator.current
     val viewModel = viewModel(MovieDetailViewModel::class) { MovieDetailViewModel(movieId) }
     val uiState by viewModel.uiState.collectAsState()
+
+    MovieDetailScreenContent(
+        uiState = uiState,
+        onBackClick = { navigator.goBack() },
+        onToggleFavorite = { viewModel.toggleFavorite() }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun MovieDetailScreenContent(
+    uiState: MovieDetailUiState,
+    onBackClick: () -> Unit,
+    onToggleFavorite: () -> Unit
+) {
     var isFabPressed by remember { mutableStateOf(false) }
 
     val fabScale by animateFloatAsState(
@@ -102,7 +114,7 @@ fun MovieDetailScreen(
                     title = { },
                     navigationIcon = {
                         IconButton(
-                            onClick = { navigator.goBack() },
+                            onClick = onBackClick,
                             modifier = Modifier
                                 .padding(8.dp)
                                 .background(
@@ -127,7 +139,7 @@ fun MovieDetailScreen(
                     FloatingActionButton(
                         onClick = {
                             isFabPressed = true
-                            viewModel.toggleFavorite()
+                            onToggleFavorite()
                         },
                         modifier = Modifier
                             .scale(fabScale)
@@ -187,14 +199,12 @@ fun MovieDetailScreen(
                         }
                     }
                 }
-
                 uiState.movie != null -> {
                     MovieDetailContent(
-                        movie = uiState.movie!!,
+                        movie = uiState.movie,
                         modifier = Modifier.padding(paddingValues)
                     )
                 }
-
                 else -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -503,7 +513,7 @@ fun MovieDetailContent(
 
 @Preview
 @Composable
-fun InfoRow(label: String, value: String) {
+fun InfoRow(label: String = "", value: String = "") {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -530,4 +540,30 @@ fun InfoRow(label: String, value: String) {
             modifier = Modifier.weight(1f)
         )
     }
+}
+
+@Preview()
+@Composable
+fun MovieDetailScreenPreview() {
+    MovieDetailScreenContent(
+        uiState = MovieDetailUiState(
+            movie = Movie(
+                id = 1,
+                title = "The Dark Knight",
+                overview = "Batman, Joker'in Gotham'da yarattığı kaosu durdurmaya çalışır.",
+                backdrop_path = "",
+                vote_average = 9.0,
+                vote_count = 29000,
+                release_date = "2008-07-18",
+                original_title = "The Dark Knight",
+                original_language = "en",
+                popularity = 123.4,
+                adult = false
+            ),
+            isLoading = false,
+            isFavorite = true
+        ),
+        onBackClick = {},
+        onToggleFavorite = {}
+    )
 }
