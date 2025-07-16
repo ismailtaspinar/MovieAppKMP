@@ -56,23 +56,39 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ismailtaspinar.movieAppKmp.data.model.Movie
 import com.ismailtaspinar.movieAppKmp.navigation.LocalNavigator
 import com.ismailtaspinar.movieAppKmp.navigation.Screen
 import com.ismailtaspinar.movieAppKmp.ui.components.MovieCard
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
+import com.ismailtaspinar.movieAppKmp.ui.viewModel.FavoritesUiState
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.FavoritesViewModel
 import kotlinx.coroutines.delay
-import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoritesScreen(
-    viewModel: FavoritesViewModel = viewModel { FavoritesViewModel() }
-) {
+fun FavoritesScreen() {
     val navigator = LocalNavigator.current
+    val viewModel: FavoritesViewModel = viewModel { FavoritesViewModel() }
     val uiState by viewModel.uiState.collectAsState()
 
+    FavoritesScreenContent(
+        uiState = uiState,
+        removeFromFavorites = viewModel::removeFromFavorites,
+        navigateToMovieDetail = { movieId ->
+            navigator.navigate(Screen.MovieDetail(movieId).route)
+        }
+    )
+}
+
+@Composable
+internal fun FavoritesScreenContent(
+    uiState: FavoritesUiState = FavoritesUiState(),
+    removeFromFavorites: (Int) -> Unit = {},
+    navigateToMovieDetail: (Int) -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +105,6 @@ fun FavoritesScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // Header Section
             Column(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp)
             ) {
@@ -143,17 +158,16 @@ fun FavoritesScreen(
                 }
             }
 
-            // Content
             if (uiState.favoriteMovies.isEmpty()) {
                 EmptyFavoritesState()
             } else {
                 FavoriteMoviesGrid(
                     movies = uiState.favoriteMovies,
                     onMovieClick = { movie ->
-                        navigator.navigate(Screen.MovieDetail(movie.id ?: 0).route)
+                        navigateToMovieDetail(movie.id ?: 0)
                     },
                     onRemoveFromFavorites = { movieId ->
-                        viewModel.removeFromFavorites(movieId)
+                        removeFromFavorites(movieId)
                     }
                 )
             }
@@ -277,8 +291,8 @@ private fun EmptyFavoritesState() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FavoriteMoviesGrid(
-    movies: List<com.ismailtaspinar.movieAppKmp.data.model.Movie>,
-    onMovieClick: (com.ismailtaspinar.movieAppKmp.data.model.Movie) -> Unit,
+    movies: List<Movie>,
+    onMovieClick: (Movie) -> Unit,
     onRemoveFromFavorites: (Int) -> Unit
 ) {
     LazyVerticalGrid(
@@ -308,7 +322,6 @@ private fun FavoriteMoviesGrid(
                     onClick = { onMovieClick(movie) }
                 )
 
-                // Enhanced Delete button
                 Surface(
                     onClick = { showDeleteDialog = true },
                     modifier = Modifier
@@ -328,7 +341,6 @@ private fun FavoriteMoviesGrid(
                     )
                 }
 
-                // Delete Confirmation Dialog
                 if (showDeleteDialog) {
                     AlertDialog(
                         onDismissRequest = { showDeleteDialog = false },
@@ -385,9 +397,18 @@ private fun FavoriteMoviesGrid(
             }
         }
 
-        // Bottom spacer
         item {
             Spacer(modifier = Modifier.height(80.dp))
         }
     }
+}
+
+@Preview
+@Composable
+fun FavoritesScreenPreview() {
+    FavoritesScreenContent(
+        uiState = FavoritesUiState(),
+        removeFromFavorites = {},
+        navigateToMovieDetail = {}
+    )
 }

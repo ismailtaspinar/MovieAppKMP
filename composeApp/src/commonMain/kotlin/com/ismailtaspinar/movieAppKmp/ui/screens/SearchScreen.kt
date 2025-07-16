@@ -50,21 +50,39 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ismailtaspinar.movieAppKmp.data.model.Movie
 import com.ismailtaspinar.movieAppKmp.navigation.LocalNavigator
 import com.ismailtaspinar.movieAppKmp.navigation.Screen
 import com.ismailtaspinar.movieAppKmp.ui.components.SearchMovieItem
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
+import com.ismailtaspinar.movieAppKmp.ui.viewModel.SearchUiState
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.SearchViewModel
 import kotlinx.coroutines.delay
 import moe.tlaster.precompose.viewmodel.viewModel
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen() {
     val navigator = LocalNavigator.current
     val viewModel = viewModel(SearchViewModel::class) { SearchViewModel() }
     val uiState by viewModel.uiState.collectAsState()
 
+    SearchScreenContent(
+        uiState = uiState,
+        onSearchQueryChange = viewModel::onSearchQueryChange,
+        onMovieClick = { movie ->
+            navigator.navigate(Screen.MovieDetail(movie.id ?: 0).route)
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun SearchScreenContent(
+    uiState: SearchUiState,
+    onSearchQueryChange: (String) -> Unit,
+    onMovieClick: (Movie) -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -102,7 +120,7 @@ fun SearchScreen() {
                 )
             }
 
-            // Enhanced Search Bar
+            // Search TextField Card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,7 +133,7 @@ fun SearchScreen() {
             ) {
                 OutlinedTextField(
                     value = uiState.searchQuery,
-                    onValueChange = viewModel::onSearchQueryChange,
+                    onValueChange = onSearchQueryChange,
                     label = {
                         Text(
                             "Film adı girin...",
@@ -132,7 +150,7 @@ fun SearchScreen() {
                     trailingIcon = {
                         if (uiState.searchQuery.isNotBlank()) {
                             IconButton(
-                                onClick = { viewModel.onSearchQueryChange("") }
+                                onClick = { onSearchQueryChange("") }
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Clear,
@@ -159,11 +177,9 @@ fun SearchScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Search Results
             Box(modifier = Modifier.weight(1f)) {
                 when {
                     uiState.isSearching -> {
-                        // Loading State
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
@@ -187,22 +203,17 @@ fun SearchScreen() {
                     }
 
                     uiState.searchQuery.isBlank() -> {
-                        // Empty Search State
                         EmptySearchState()
                     }
 
                     uiState.searchResults.isEmpty() -> {
-                        // No Results State
                         NoResultsState(searchQuery = uiState.searchQuery)
                     }
 
                     else -> {
-                        // Results List
                         SearchResultsList(
                             results = uiState.searchResults,
-                            onMovieClick = { movie ->
-                                navigator.navigate(Screen.MovieDetail(movie.id ?: 0).route)
-                            }
+                            onMovieClick = onMovieClick
                         )
                     }
                 }
@@ -312,13 +323,13 @@ private fun NoResultsState(searchQuery: String) {
     }
 }
 
+@Preview
 @Composable
 private fun SearchResultsList(
-    results: List<com.ismailtaspinar.movieAppKmp.data.model.Movie>,
-    onMovieClick: (com.ismailtaspinar.movieAppKmp.data.model.Movie) -> Unit
+    results: List<Movie> = emptyList(),
+    onMovieClick: (Movie) -> Unit = {}
 ) {
     Column {
-        // Results Header
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -357,13 +368,12 @@ private fun SearchResultsList(
             }
         }
 
-        // Results List
         LazyColumn {
             itemsIndexed(results) { index, movie ->
                 var isVisible by remember { mutableStateOf(false) }
 
                 LaunchedEffect(movie) {
-                    delay(index * 50L) // Staggered animation
+                    delay(index * 50L)
                     isVisible = true
                 }
 
@@ -381,10 +391,90 @@ private fun SearchResultsList(
                 }
             }
 
-            // Bottom spacer
             item {
                 Spacer(modifier = Modifier.height(80.dp))
             }
         }
     }
+}
+
+@Preview()
+@Composable
+fun SearchScreenContentPreview_EmptyState() {
+    SearchScreenContent(
+        uiState = SearchUiState(
+            searchQuery = "",
+            searchResults = emptyList(),
+            isSearching = false
+        ),
+        onSearchQueryChange = {},
+        onMovieClick = {}
+    )
+}
+
+@Preview()
+@Composable
+fun SearchScreenContentPreview_SearchingState() {
+    SearchScreenContent(
+        uiState = SearchUiState(
+            searchQuery = "Inception",
+            searchResults = emptyList(),
+            isSearching = true
+        ),
+        onSearchQueryChange = {},
+        onMovieClick = {}
+    )
+}
+
+@Preview()
+@Composable
+fun SearchScreenContentPreview_ResultsState() {
+    SearchScreenContent(
+        uiState = SearchUiState(
+            searchQuery = "Batman",
+            searchResults = listOf(
+                Movie(
+                    id = 1,
+                    title = "The Dark Knight",
+                    overview = "Batman, Joker'in yarattığı kaosu durdurmaya çalışır.",
+                    poster_path = "",
+                    vote_average = 9.0,
+                    release_date = "2008"
+                ),
+                Movie(
+                    id = 2,
+                    title = "Batman Begins",
+                    overview = "Bruce Wayne'in Batman'e dönüşüm hikayesi.",
+                    poster_path = "",
+                    vote_average = 8.2,
+                    release_date = "2005"
+                ),
+                Movie(
+                    id = 3,
+                    title = "The Batman",
+                    overview = "Genç Batman, Riddler'ın bıraktığı ipuçlarını takip eder.",
+                    poster_path = "",
+                    vote_average = 7.8,
+                    release_date = "2022"
+                )
+            ),
+            isSearching = false
+        ),
+        onSearchQueryChange = {},
+        onMovieClick = {}
+    )
+}
+
+@Preview()
+@Composable
+fun SearchScreenContentPreview_NoResultsState() {
+    SearchScreenContent(
+        uiState = SearchUiState(
+            searchQuery = "asdqwezxc",
+            searchResults = emptyList(),
+            isSearching = false
+        ),
+        onSearchQueryChange = {},
+        onMovieClick = {}
+    )
 }

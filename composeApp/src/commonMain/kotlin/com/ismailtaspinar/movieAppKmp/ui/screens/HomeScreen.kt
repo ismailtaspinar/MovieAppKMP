@@ -40,8 +40,10 @@ import com.ismailtaspinar.movieAppKmp.navigation.LocalNavigator
 import com.ismailtaspinar.movieAppKmp.navigation.Screen
 import com.ismailtaspinar.movieAppKmp.ui.components.MovieCard
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
+import com.ismailtaspinar.movieAppKmp.ui.viewModel.HomeUiState
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.HomeViewModel
 import moe.tlaster.precompose.viewmodel.viewModel
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun HomeScreen() {
@@ -49,6 +51,19 @@ fun HomeScreen() {
     val viewModel = viewModel(HomeViewModel::class) { HomeViewModel() }
     val uiState by viewModel.uiState.collectAsState()
 
+    HomeScreenContent(
+        uiState = uiState,
+        navigateToMovieDetail = { movieId ->
+            navigator.navigate(Screen.MovieDetail(movieId).route)
+        }
+    )
+}
+
+@Composable
+internal fun HomeScreenContent(
+    uiState: HomeUiState,
+    navigateToMovieDetail: (Int) -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +104,6 @@ fun HomeScreen() {
                 contentPadding = PaddingValues(vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Header
                 item {
                     Column(
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
@@ -110,7 +124,6 @@ fun HomeScreen() {
                     }
                 }
 
-                // Top Rated Section
                 item {
                     MovieSection(
                         title = "🏆 En Çok Beğenilenler",
@@ -118,12 +131,11 @@ fun HomeScreen() {
                         movies = uiState.topRatedMovies,
                         gradientColor = AppColors.primary,
                         onMovieClick = { movie ->
-                            navigator.navigate(Screen.MovieDetail(movie.id ?: 0).route)
+                            navigateToMovieDetail(movie.id ?: 0)
                         }
                     )
                 }
 
-                // Upcoming Section
                 item {
                     MovieSection(
                         title = "🚀 Yakında Gelecekler",
@@ -131,12 +143,11 @@ fun HomeScreen() {
                         movies = uiState.upcomingMovies,
                         gradientColor = AppColors.secondary,
                         onMovieClick = { movie ->
-                            navigator.navigate(Screen.MovieDetail(movie.id ?: 0).route)
+                            navigateToMovieDetail(movie.id ?: 0)
                         }
                     )
                 }
 
-                // Now Playing Section
                 item {
                     MovieSection(
                         title = "🎭 Vizyondakiler",
@@ -144,12 +155,11 @@ fun HomeScreen() {
                         movies = uiState.nowPlayingMovies,
                         gradientColor = AppColors.accent,
                         onMovieClick = { movie ->
-                            navigator.navigate(Screen.MovieDetail(movie.id ?: 0).route)
+                            navigateToMovieDetail(movie.id ?: 0)
                         }
                     )
                 }
 
-                // Bottom spacer
                 item {
                     Spacer(modifier = Modifier.height(80.dp))
                 }
@@ -158,13 +168,15 @@ fun HomeScreen() {
     }
 }
 
+
+@Preview
 @Composable
 fun MovieSection(
-    title: String,
-    subtitle: String,
-    movies: List<Movie>,
-    gradientColor: androidx.compose.ui.graphics.Color,
-    onMovieClick: (Movie) -> Unit
+    title: String = "Title",
+    subtitle: String = "Subtitle",
+    movies: List<Movie> = emptyList(),
+    gradientColor: androidx.compose.ui.graphics.Color = AppColors.primary,
+    onMovieClick: (Movie) -> Unit = {}
 ) {
     var isVisible by remember { mutableStateOf(false) }
 
@@ -174,7 +186,6 @@ fun MovieSection(
         label = "sectionAlpha"
     )
 
-    // Trigger animation when section becomes visible
     androidx.compose.runtime.LaunchedEffect(movies) {
         if (movies.isNotEmpty()) {
             isVisible = true
@@ -186,7 +197,6 @@ fun MovieSection(
             .fillMaxWidth()
             .alpha(alpha)
     ) {
-        // Section Header
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -226,7 +236,6 @@ fun MovieSection(
                     )
                 }
 
-                // Accent circle
                 Surface(
                     modifier = Modifier.size(12.dp),
                     color = gradientColor,
@@ -235,7 +244,6 @@ fun MovieSection(
             }
         }
 
-        // Movies List
         if (movies.isNotEmpty()) {
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 20.dp),
@@ -250,7 +258,6 @@ fun MovieSection(
                 }
             }
         } else {
-            // Empty state
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -283,4 +290,13 @@ fun MovieSection(
 
         Spacer(modifier = Modifier.height(24.dp))
     }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview() {
+    HomeScreenContent(
+        uiState = HomeUiState(),
+        navigateToMovieDetail = {}
+    )
 }

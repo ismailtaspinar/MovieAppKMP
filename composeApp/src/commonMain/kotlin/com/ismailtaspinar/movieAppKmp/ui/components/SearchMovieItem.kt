@@ -45,16 +45,15 @@ import androidx.compose.ui.unit.sp
 import com.ismailtaspinar.movieAppKmp.data.model.Movie
 import com.ismailtaspinar.movieAppKmp.ui.components.imageLoad.KamelAsyncImage
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
-import io.kamel.core.config.KamelConfig
-import org.koin.compose.koinInject
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchMovieItem(
-    movie: Movie,
-    onClick: () -> Unit
+    movie: Movie = Movie(),
+    onClick: () -> Unit = {}
 ) {
-    val kamelConfig = koinInject<KamelConfig>()
     var isPressed by remember { mutableStateOf(false) }
 
     val cardScale by animateFloatAsState(
