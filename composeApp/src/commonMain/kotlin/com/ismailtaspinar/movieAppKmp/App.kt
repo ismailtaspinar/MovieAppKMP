@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.ismailtaspinar.movieAppKmp.navigation.LocalNavigator
 import com.ismailtaspinar.movieAppKmp.navigation.Screen
 import com.ismailtaspinar.movieAppKmp.navigation.bottomNavItems
 import com.ismailtaspinar.movieAppKmp.ui.screens.FavoritesScreen
@@ -56,73 +57,73 @@ fun MainApp() {
 
         PreComposeApp {
             val navigator = rememberNavigator()
-            var currentScreen by remember { mutableStateOf(Screen.Home.route) }
 
-            val bottomNavScreens = listOf(
-                Screen.Home.route,
-                Screen.Search.route,
-                Screen.Favorites.route
-            )
+            CompositionLocalProvider(LocalNavigator provides navigator) {
+                var currentScreen by remember { mutableStateOf(Screen.Home.route) }
 
-            val gradientColors = listOf(
-                AppColors.gradientStart,
-                AppColors.gradientMiddle,
-                AppColors.gradientEnd
-            )
+                val bottomNavScreens = listOf(
+                    Screen.Home.route,
+                    Screen.Search.route,
+                    Screen.Favorites.route
+                )
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = gradientColors,
-                            startY = 0f,
-                            endY = Float.POSITIVE_INFINITY
+                val gradientColors = listOf(
+                    AppColors.gradientStart,
+                    AppColors.gradientMiddle,
+                    AppColors.gradientEnd
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = gradientColors,
+                                startY = 0f,
+                                endY = Float.POSITIVE_INFINITY
+                            )
                         )
-                    )
-            ) {
-                Scaffold(
-                    containerColor = Color.Transparent,
-                    bottomBar = {
-                        if (currentScreen in bottomNavScreens) {
-                            ModernNavigationBar(
-                                currentScreen = currentScreen,
-                                onNavigate = { route ->
-                                    currentScreen = route
-                                    navigator.navigate(route)
-                                }
-                            )
+                ) {
+                    Scaffold(
+                        containerColor = Color.Transparent,
+                        bottomBar = {
+                            if (currentScreen in bottomNavScreens) {
+                                ModernNavigationBar(
+                                    currentScreen = currentScreen,
+                                    onNavigate = { route ->
+                                        currentScreen = route
+                                        navigator.navigate(route)
+                                    }
+                                )
+                            }
                         }
-                    }
-                ) { paddingValues ->
-                    NavHost(
-                        navigator = navigator,
-                        initialRoute = Screen.Home.route,
-                        modifier = Modifier.padding(paddingValues),
-                        navTransition = NavTransition()
-                    ) {
-                        scene(route = Screen.Home.route) {
-                            currentScreen = Screen.Home.route
-                            HomeScreen(navigator)
-                        }
+                    ) { paddingValues ->
+                        NavHost(
+                            navigator = navigator,
+                            initialRoute = Screen.Home.route,
+                            modifier = Modifier.padding(paddingValues),
+                            navTransition = NavTransition()
+                        ) {
+                            scene(route = Screen.Home.route) {
+                                currentScreen = Screen.Home.route
+                                HomeScreen()
+                            }
 
-                        scene(route = Screen.Search.route) {
-                            currentScreen = Screen.Search.route
-                            SearchScreen(navigator)
-                        }
+                            scene(route = Screen.Search.route) {
+                                currentScreen = Screen.Search.route
+                                SearchScreen()
+                            }
 
-                        scene(route = Screen.Favorites.route) {
-                            currentScreen = Screen.Favorites.route
-                            FavoritesScreen(navigator)
-                        }
+                            scene(route = Screen.Favorites.route) {
+                                currentScreen = Screen.Favorites.route
+                                FavoritesScreen()
+                            }
 
-                        scene(route = Screen.MovieDetail.routePattern) { backStackEntry ->
-                            val movieId: Int = backStackEntry.path<Int>("movieId") ?: 0
-                            currentScreen = "movie_detail"
-                            MovieDetailScreen(
-                                movieId = movieId,
-                                navigator = navigator
-                            )
+                            scene(route = Screen.MovieDetail.routePattern) { backStackEntry ->
+                                val movieId: Int = backStackEntry.path<Int>("movieId") ?: 0
+                                currentScreen = "movie_detail"
+                                MovieDetailScreen(movieId = movieId)
+                            }
                         }
                     }
                 }

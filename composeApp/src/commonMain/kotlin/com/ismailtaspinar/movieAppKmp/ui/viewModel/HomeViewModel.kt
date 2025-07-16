@@ -30,14 +30,10 @@ class HomeViewModel(
 
     private fun loadMovies() {
         viewModelScope.launch {
-            println("load movies")
             _uiState.value = _uiState.value.copy(isLoading = true)
-            println("ui state loading ${uiState.value.isLoading}")
 
             launch {
-                println("launching")
                 repository.getTopRatedMovies().collect { movies ->
-                    println("movies $movies")
                     _uiState.value = _uiState.value.copy(topRatedMovies = movies)
                 }
             }

@@ -36,15 +36,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ismailtaspinar.movieAppKmp.data.model.Movie
+import com.ismailtaspinar.movieAppKmp.navigation.LocalNavigator
 import com.ismailtaspinar.movieAppKmp.navigation.Screen
 import com.ismailtaspinar.movieAppKmp.ui.components.MovieCard
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.HomeViewModel
-import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
 @Composable
-fun HomeScreen(navigator: Navigator) {
+fun HomeScreen() {
+    val navigator = LocalNavigator.current
     val viewModel = viewModel(HomeViewModel::class) { HomeViewModel() }
     val uiState by viewModel.uiState.collectAsState()
 

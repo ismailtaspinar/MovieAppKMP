@@ -50,17 +50,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ismailtaspinar.movieAppKmp.navigation.LocalNavigator
 import com.ismailtaspinar.movieAppKmp.navigation.Screen
 import com.ismailtaspinar.movieAppKmp.ui.components.SearchMovieItem
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.SearchViewModel
 import kotlinx.coroutines.delay
-import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navigator: Navigator) {
+fun SearchScreen() {
+    val navigator = LocalNavigator.current
     val viewModel = viewModel(SearchViewModel::class) { SearchViewModel() }
     val uiState by viewModel.uiState.collectAsState()
 

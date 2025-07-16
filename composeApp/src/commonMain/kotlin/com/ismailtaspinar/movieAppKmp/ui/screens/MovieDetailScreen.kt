@@ -54,24 +54,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ismailtaspinar.movieAppKmp.data.model.Movie
+import com.ismailtaspinar.movieAppKmp.navigation.LocalNavigator
 import com.ismailtaspinar.movieAppKmp.ui.components.imageLoad.KamelAsyncImage
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.MovieDetailViewModel
 import com.ismailtaspinar.movieAppKmp.utils.extension.formatToOneDecimal
-import io.kamel.core.config.KamelConfig
-import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.koinInject
 
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailScreen(
     movieId: Int = 0,
-    navigator: Navigator = Navigator(),
-    viewModel: MovieDetailViewModel = viewModel { MovieDetailViewModel(movieId) }
 ) {
+    val navigator = LocalNavigator.current
+    val viewModel = viewModel(MovieDetailViewModel::class) { MovieDetailViewModel(movieId) }
     val uiState by viewModel.uiState.collectAsState()
     var isFabPressed by remember { mutableStateOf(false) }
 
@@ -235,8 +233,6 @@ fun MovieDetailContent(
     movie: Movie = Movie(),
     modifier: Modifier = Modifier
 ) {
-    val kamelConfig = koinInject<KamelConfig>()
-
     Column(
         modifier = modifier
             .fillMaxSize()
