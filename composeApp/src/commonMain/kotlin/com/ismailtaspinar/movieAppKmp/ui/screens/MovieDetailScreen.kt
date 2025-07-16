@@ -65,13 +65,15 @@ import io.kamel.image.config.LocalKamelConfig
 import io.ktor.http.Url
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 
+@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailScreen(
-    movieId: Int,
-    navigator: Navigator,
+    movieId: Int = 0,
+    navigator: Navigator = Navigator(),
     viewModel: MovieDetailViewModel = viewModel { MovieDetailViewModel(movieId) }
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -231,9 +233,10 @@ fun MovieDetailScreen(
     }
 }
 
+@Preview
 @Composable
 fun MovieDetailContent(
-    movie: Movie,
+    movie: Movie = Movie(),
     modifier: Modifier = Modifier
 ) {
     val kamelConfig = koinInject<KamelConfig>()
@@ -471,7 +474,7 @@ fun MovieDetailContent(
                 )
             }
 
-            Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
             // Enhanced Additional Info Card
             Text(
@@ -510,6 +513,7 @@ fun MovieDetailContent(
     }
 }
 
+@Preview
 @Composable
 fun InfoRow(label: String, value: String) {
     Row(
