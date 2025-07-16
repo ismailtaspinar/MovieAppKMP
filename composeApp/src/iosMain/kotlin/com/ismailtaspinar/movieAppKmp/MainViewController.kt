@@ -5,4 +5,4 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIViewController
 
 @OptIn(ExperimentalForeignApi::class)
-fun MainViewController(): UIViewController = ComposeUIViewController { AppInit { MainApp() }}
+fun MainViewController(): UIViewController = ComposeUIViewController { MainApp() }

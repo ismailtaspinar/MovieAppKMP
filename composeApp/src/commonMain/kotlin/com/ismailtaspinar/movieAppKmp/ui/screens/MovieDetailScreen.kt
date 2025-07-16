@@ -37,7 +37,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,14 +54,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ismailtaspinar.movieAppKmp.data.model.Movie
+import com.ismailtaspinar.movieAppKmp.ui.components.imageLoad.KamelAsyncImage
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.MovieDetailViewModel
 import com.ismailtaspinar.movieAppKmp.utils.extension.formatToOneDecimal
 import io.kamel.core.config.KamelConfig
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
-import io.kamel.image.config.LocalKamelConfig
-import io.ktor.http.Url
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -251,13 +247,19 @@ fun MovieDetailContent(
                 .fillMaxWidth()
                 .height(350.dp)
         ) {
-            CompositionLocalProvider(LocalKamelConfig provides kamelConfig) {
-                KamelImage(
-                    resource = asyncPainterResource(Url(movie.backdropUrl)),
-                    contentDescription = movie.title,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
-                    onLoading = {
+            KamelAsyncImage(
+                url = movie.backdropUrl,
+                contentDescription = movie.title,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                placeholder = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(AppColors.surfaceVariant),
+                        contentAlignment = Alignment.Center
+                    )
+                    {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -280,35 +282,34 @@ fun MovieDetailContent(
                                 )
                             }
                         }
-                    },
-                    onFailure = {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(AppColors.surfaceVariant),
-                            contentAlignment = Alignment.Center
+                    }
+                },
+                error = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(AppColors.surfaceVariant),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Text(
-                                    text = "🎬",
-                                    fontSize = 48.sp,
-                                    color = AppColors.onSurfaceVariant
-                                )
-                                Text(
-                                    text = "Resim yüklenemedi",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = AppColors.onSurfaceVariant
-                                )
-                            }
+                            Text(
+                                text = "🎬",
+                                fontSize = 48.sp,
+                                color = AppColors.onSurfaceVariant
+                            )
+                            Text(
+                                text = "Resim yüklenemedi",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = AppColors.onSurfaceVariant
+                            )
                         }
                     }
-                )
-            }
+                }
+            )
 
-            // Enhanced gradient overlay
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -327,13 +328,11 @@ fun MovieDetailContent(
             )
         }
 
-        // Movie Information
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(24.dp)
         ) {
-            // Enhanced Title
             Text(
                 text = movie.title ?: "",
                 style = MaterialTheme.typography.headlineLarge.copy(
@@ -346,12 +345,10 @@ fun MovieDetailContent(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Enhanced Rating and metadata row
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Enhanced Rating Badge
                 Surface(
                     shape = RoundedCornerShape(20.dp),
                     color = AppColors.primary,
@@ -381,7 +378,6 @@ fun MovieDetailContent(
                     }
                 }
 
-                // Enhanced Release Date Badge
                 Surface(
                     shape = RoundedCornerShape(16.dp),
                     color = AppColors.secondary.copy(alpha = 0.15f),
@@ -410,7 +406,6 @@ fun MovieDetailContent(
                 }
             }
 
-            // Vote Count Badge
             Spacer(modifier = Modifier.height(8.dp))
 
             Surface(
@@ -442,7 +437,6 @@ fun MovieDetailContent(
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            // Enhanced Overview Section
             Text(
                 text = "📖 Film Özeti",
                 style = MaterialTheme.typography.titleLarge.copy(
@@ -476,7 +470,6 @@ fun MovieDetailContent(
 
         Spacer(modifier = Modifier.height(28.dp))
 
-            // Enhanced Additional Info Card
             Text(
                 text = "ℹ️ Film Detayları",
                 style = MaterialTheme.typography.titleLarge.copy(
@@ -507,7 +500,6 @@ fun MovieDetailContent(
                 }
             }
 
-            // Add bottom padding for FAB
             Spacer(modifier = Modifier.height(100.dp))
         }
     }

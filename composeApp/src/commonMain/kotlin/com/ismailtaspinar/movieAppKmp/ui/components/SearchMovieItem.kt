@@ -27,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,12 +43,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ismailtaspinar.movieAppKmp.data.model.Movie
+import com.ismailtaspinar.movieAppKmp.ui.components.imageLoad.KamelAsyncImage
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
 import io.kamel.core.config.KamelConfig
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
-import io.kamel.image.config.LocalKamelConfig
-import io.ktor.http.Url
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,7 +75,6 @@ fun SearchMovieItem(
         label = "cardElevation"
     )
 
-    // Using Material3 Card with built-in onClick support
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -101,51 +96,47 @@ fun SearchMovieItem(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Movie Poster
             Box(
                 modifier = Modifier
                     .width(90.dp)
                     .height(135.dp)
                     .clip(RoundedCornerShape(12.dp))
             ) {
-                CompositionLocalProvider(LocalKamelConfig provides kamelConfig) {
-                    KamelImage(
-                        resource = asyncPainterResource(Url(movie.posterUrl)),
-                        contentDescription = movie.title,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop,
-                        onLoading = {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(AppColors.surfaceVariant),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(32.dp),
-                                    color = AppColors.primary,
-                                    strokeWidth = 3.dp
-                                )
-                            }
-                        },
-                        onFailure = {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(AppColors.surfaceVariant),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = "🎬",
-                                    fontSize = 28.sp,
-                                    color = AppColors.onSurfaceVariant
-                                )
-                            }
+                KamelAsyncImage(
+                    url = movie.posterUrl,
+                    contentDescription = movie.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    placeholder = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(AppColors.surfaceVariant),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(32.dp),
+                                color = AppColors.primary,
+                                strokeWidth = 3.dp
+                            )
                         }
-                    )
-                }
+                    },
+                    error = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(AppColors.surfaceVariant),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "🎬",
+                                fontSize = 28.sp,
+                                color = AppColors.onSurfaceVariant
+                            )
+                        }
+                    }
+                )
 
-                // Gradient overlay for better text visibility
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -160,7 +151,6 @@ fun SearchMovieItem(
                         )
                 )
 
-                // Rating Badge
                 Surface(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -179,13 +169,11 @@ fun SearchMovieItem(
                 }
             }
 
-            // Movie Details
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 16.dp)
             ) {
-                // Title
                 Text(
                     text = movie.title ?: "",
                     style = MaterialTheme.typography.titleMedium.copy(
@@ -199,7 +187,6 @@ fun SearchMovieItem(
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-                // Overview
                 Text(
                     text = movie.overview ?: "",
                     style = MaterialTheme.typography.bodyMedium.copy(
@@ -213,12 +200,10 @@ fun SearchMovieItem(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Movie metadata
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Release Date
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -243,7 +228,6 @@ fun SearchMovieItem(
                         )
                     }
 
-                    // Popularity indicator
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {

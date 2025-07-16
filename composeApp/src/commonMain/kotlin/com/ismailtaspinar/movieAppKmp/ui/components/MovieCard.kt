@@ -26,7 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,13 +42,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ismailtaspinar.movieAppKmp.data.model.Movie
+import com.ismailtaspinar.movieAppKmp.ui.components.imageLoad.KamelAsyncImage
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
 import com.ismailtaspinar.movieAppKmp.utils.extension.formatToOneDecimal
 import io.kamel.core.config.KamelConfig
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
-import io.kamel.image.config.LocalKamelConfig
-import io.ktor.http.Url
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,7 +76,6 @@ fun MovieCard(
         label = "cardElevation"
     )
 
-    // Using Material3 Card with built-in onClick support
     Card(
         onClick = onClick,
         modifier = modifier
@@ -101,43 +96,39 @@ fun MovieCard(
                     .fillMaxWidth()
                     .height(240.dp)
             ) {
-                CompositionLocalProvider(LocalKamelConfig provides kamelConfig) {
-                    KamelImage(
-                        resource = asyncPainterResource(Url(movie.posterUrl)),
-                        contentDescription = movie.title,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-                        contentScale = ContentScale.Crop,
-                        onLoading = {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(AppColors.surfaceVariant),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(40.dp),
-                                    color = AppColors.primary
-                                )
-                            }
-                        },
-                        onFailure = {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(AppColors.surfaceVariant),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = "🎬",
-                                    fontSize = 32.sp,
-                                    color = AppColors.onSurfaceVariant
-                                )
-                            }
+                KamelAsyncImage(
+                    url = movie.posterUrl,
+                    contentDescription = movie.title,
+                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                    contentScale = ContentScale.Crop,
+                    placeholder = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(AppColors.surfaceVariant),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(40.dp),
+                                color = AppColors.primary
+                            )
                         }
-                    )
-                }
+                    },
+                    error = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(AppColors.surfaceVariant),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "🎬",
+                                fontSize = 32.sp,
+                                color = AppColors.onSurfaceVariant
+                            )
+                        }
+                    }
+                )
 
                 Box(
                     modifier = Modifier
@@ -171,7 +162,6 @@ fun MovieCard(
                 }
             }
 
-            // Movie Info
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -194,7 +184,6 @@ fun MovieCard(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Release Year
                     Text(
                         text = movie.release_date?.take(4) ?: "N/A",
                         style = MaterialTheme.typography.bodySmall.copy(
@@ -206,7 +195,6 @@ fun MovieCard(
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    // Popularity indicator
                     Box(
                         modifier = Modifier
                             .size(4.dp)

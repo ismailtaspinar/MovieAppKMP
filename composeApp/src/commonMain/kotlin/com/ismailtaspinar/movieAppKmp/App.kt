@@ -29,91 +29,101 @@ import com.ismailtaspinar.movieAppKmp.ui.screens.MovieDetailScreen
 import com.ismailtaspinar.movieAppKmp.ui.screens.SearchScreen
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
 import com.ismailtaspinar.movieAppKmp.utils.StatusBarController
+import io.kamel.core.config.KamelConfig
+import io.kamel.core.config.takeFrom
+import io.kamel.image.config.LocalKamelConfig
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.navigation.transition.NavTransition
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainApp() {
-    LaunchedEffect(Unit) {
-        StatusBarController.setupSystemBars(
-            topColorHex = "#0B0D17",
-            bottomColorHex = "#1A1D2E"
-        )
-    }
+    val kamelConfig = koinInject<KamelConfig>()
 
-    PreComposeApp {
-        val navigator = rememberNavigator()
-        var currentScreen by remember { mutableStateOf(Screen.Home.route) }
+    CompositionLocalProvider(LocalKamelConfig provides KamelConfig {
+        takeFrom(kamelConfig)
+    }) {
+        LaunchedEffect(Unit) {
+            StatusBarController.setupSystemBars(
+                topColorHex = "#0B0D17",
+                bottomColorHex = "#1A1D2E"
+            )
+        }
 
-        val bottomNavScreens = listOf(
-            Screen.Home.route,
-            Screen.Search.route,
-            Screen.Favorites.route
-        )
+        PreComposeApp {
+            val navigator = rememberNavigator()
+            var currentScreen by remember { mutableStateOf(Screen.Home.route) }
 
-        val gradientColors = listOf(
-            AppColors.gradientStart,
-            AppColors.gradientMiddle,
-            AppColors.gradientEnd
-        )
+            val bottomNavScreens = listOf(
+                Screen.Home.route,
+                Screen.Search.route,
+                Screen.Favorites.route
+            )
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = gradientColors,
-                        startY = 0f,
-                        endY = Float.POSITIVE_INFINITY
+            val gradientColors = listOf(
+                AppColors.gradientStart,
+                AppColors.gradientMiddle,
+                AppColors.gradientEnd
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = gradientColors,
+                            startY = 0f,
+                            endY = Float.POSITIVE_INFINITY
+                        )
                     )
-                )
-        ) {
-            Scaffold(
-                containerColor = Color.Transparent,
-                bottomBar = {
-                    if (currentScreen in bottomNavScreens) {
-                        ModernNavigationBar(
-                            currentScreen = currentScreen,
-                            onNavigate = { route ->
-                                currentScreen = route
-                                navigator.navigate(route)
-                            }
-                        )
+            ) {
+                Scaffold(
+                    containerColor = Color.Transparent,
+                    bottomBar = {
+                        if (currentScreen in bottomNavScreens) {
+                            ModernNavigationBar(
+                                currentScreen = currentScreen,
+                                onNavigate = { route ->
+                                    currentScreen = route
+                                    navigator.navigate(route)
+                                }
+                            )
+                        }
                     }
-                }
-            ) { paddingValues ->
-                NavHost(
-                    navigator = navigator,
-                    initialRoute = Screen.Home.route,
-                    modifier = Modifier.padding(paddingValues),
-                    navTransition = NavTransition()
-                ) {
-                    scene(route = Screen.Home.route) {
-                        currentScreen = Screen.Home.route
-                        HomeScreen(navigator)
-                    }
+                ) { paddingValues ->
+                    NavHost(
+                        navigator = navigator,
+                        initialRoute = Screen.Home.route,
+                        modifier = Modifier.padding(paddingValues),
+                        navTransition = NavTransition()
+                    ) {
+                        scene(route = Screen.Home.route) {
+                            currentScreen = Screen.Home.route
+                            HomeScreen(navigator)
+                        }
 
-                    scene(route = Screen.Search.route) {
-                        currentScreen = Screen.Search.route
-                        SearchScreen(navigator)
-                    }
+                        scene(route = Screen.Search.route) {
+                            currentScreen = Screen.Search.route
+                            SearchScreen(navigator)
+                        }
 
-                    scene(route = Screen.Favorites.route) {
-                        currentScreen = Screen.Favorites.route
-                        FavoritesScreen(navigator)
-                    }
+                        scene(route = Screen.Favorites.route) {
+                            currentScreen = Screen.Favorites.route
+                            FavoritesScreen(navigator)
+                        }
 
-                    scene(route = Screen.MovieDetail.routePattern) { backStackEntry ->
-                        val movieId: Int = backStackEntry.path<Int>("movieId") ?: 0
-                        currentScreen = "movie_detail"
-                        MovieDetailScreen(
-                            movieId = movieId,
-                            navigator = navigator
-                        )
+                        scene(route = Screen.MovieDetail.routePattern) { backStackEntry ->
+                            val movieId: Int = backStackEntry.path<Int>("movieId") ?: 0
+                            currentScreen = "movie_detail"
+                            MovieDetailScreen(
+                                movieId = movieId,
+                                navigator = navigator
+                            )
+                        }
                     }
                 }
             }
