@@ -35,8 +35,6 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(compose.ui)
-            implementation(compose.preview)
 
             implementation(libs.kotlinx.coroutines.android)
         }
@@ -49,6 +47,8 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(compose.ui)
+            implementation(compose.preview)
             implementation(libs.compose.material.icons.extended)
 
             implementation(libs.kotlinx.serialization.json)

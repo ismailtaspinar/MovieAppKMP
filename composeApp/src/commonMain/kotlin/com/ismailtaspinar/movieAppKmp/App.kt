@@ -7,6 +7,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -116,7 +117,8 @@ fun MainApp() {
                         NavHost(
                             navigator = navigator,
                             initialRoute = Screen.Home.route,
-                            modifier = Modifier.padding(paddingValues),
+                            modifier = Modifier.padding(paddingValues)
+                                .consumeWindowInsets(paddingValues),
                             navTransition = NavTransition()
                         ) {
                             scene(route = Screen.Home.route) {

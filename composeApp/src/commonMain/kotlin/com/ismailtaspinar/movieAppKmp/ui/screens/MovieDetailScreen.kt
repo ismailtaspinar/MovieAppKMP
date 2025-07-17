@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -111,6 +113,7 @@ internal fun MovieDetailScreenContent(
             containerColor = Color.Transparent,
             topBar = {
                 TopAppBar(
+                    modifier = Modifier.statusBarsPadding(),
                     title = { },
                     navigationIcon = {
                         IconButton(
@@ -199,12 +202,14 @@ internal fun MovieDetailScreenContent(
                         }
                     }
                 }
+
                 uiState.movie != null -> {
                     MovieDetailContent(
                         movie = uiState.movie,
                         modifier = Modifier.padding(paddingValues)
                     )
                 }
+
                 else -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -474,7 +479,7 @@ fun MovieDetailContent(
                 )
             }
 
-        Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
             Text(
                 text = "ℹ️ Film Detayları",
