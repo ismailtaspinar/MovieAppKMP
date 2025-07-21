@@ -47,8 +47,6 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(compose.ui)
-            implementation(compose.preview)
             implementation(libs.compose.material.icons.extended)
 
             implementation(libs.kotlinx.serialization.json)
@@ -106,6 +104,12 @@ android {
     buildFeatures {
         buildConfig = true
     }
+}
+
+compose.resources {
+    publicResClass = true // Resource class'ları public yapar
+    packageOfResClass = "movieappkmp.composeapp.generated.resources" // Package name
+    generateResClass = always // Her zaman generate et
 }
 
 dependencies {

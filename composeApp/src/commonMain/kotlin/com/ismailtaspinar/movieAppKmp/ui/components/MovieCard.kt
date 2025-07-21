@@ -45,6 +45,9 @@ import com.ismailtaspinar.movieAppKmp.data.model.Movie
 import com.ismailtaspinar.movieAppKmp.ui.components.imageLoad.KamelAsyncImage
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
 import com.ismailtaspinar.movieAppKmp.utils.extension.formatToOneDecimal
+import movieappkmp.composeapp.generated.resources.Res
+import movieappkmp.composeapp.generated.resources.popular
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
@@ -206,7 +209,7 @@ fun MovieCard(
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = "Popular",
+                        text = stringResource(Res.string.popular),
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Medium,
                             fontSize = 11.sp

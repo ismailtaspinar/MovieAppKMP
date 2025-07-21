@@ -65,6 +65,18 @@ import com.ismailtaspinar.movieAppKmp.ui.viewModel.FavoritesUiState
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.FavoritesViewModel
 import kotlinx.coroutines.delay
 import moe.tlaster.precompose.viewmodel.viewModel
+import movieappkmp.composeapp.generated.resources.Res
+import movieappkmp.composeapp.generated.resources.cancel_button
+import movieappkmp.composeapp.generated.resources.dialog_message
+import movieappkmp.composeapp.generated.resources.empty_description
+import movieappkmp.composeapp.generated.resources.empty_instruction
+import movieappkmp.composeapp.generated.resources.empty_title
+import movieappkmp.composeapp.generated.resources.favorites_subtitle
+import movieappkmp.composeapp.generated.resources.favorites_title
+import movieappkmp.composeapp.generated.resources.remove_button
+import movieappkmp.composeapp.generated.resources.remove_from_favorites
+import movieappkmp.composeapp.generated.resources.remove_from_favorites_description
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -119,7 +131,7 @@ internal fun FavoritesScreenContent(
                         modifier = Modifier.size(32.dp)
                     )
                     Text(
-                        text = "Favori Filmlerim",
+                        text = stringResource(Res.string.favorites_title),
                         style = MaterialTheme.typography.headlineLarge.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 28.sp
@@ -135,7 +147,7 @@ internal fun FavoritesScreenContent(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Beğendiğiniz filmler",
+                        text = stringResource(Res.string.favorites_subtitle),
                         style = MaterialTheme.typography.bodyLarge,
                         color = AppColors.onSurfaceVariant
                     )
@@ -207,7 +219,6 @@ private fun EmptyFavoritesState() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
-                    // Animated heart
                     var heartScale by remember { mutableStateOf(1f) }
 
                     LaunchedEffect(Unit) {
@@ -235,7 +246,7 @@ private fun EmptyFavoritesState() {
                     )
 
                     Text(
-                        text = "Henüz Favori Filminiz Yok",
+                        text = stringResource(Res.string.empty_title),
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 24.sp
@@ -245,7 +256,7 @@ private fun EmptyFavoritesState() {
                     )
 
                     Text(
-                        text = "Film detay sayfalarından kalp butonuna tıklayarak favorilerinize ekleyebilirsiniz",
+                        text = stringResource(Res.string.empty_description),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             lineHeight = 22.sp
                         ),
@@ -253,7 +264,6 @@ private fun EmptyFavoritesState() {
                         textAlign = TextAlign.Center
                     )
 
-                    // Animated instruction
                     Surface(
                         color = AppColors.primary.copy(alpha = 0.1f),
                         shape = RoundedCornerShape(16.dp),
@@ -274,7 +284,7 @@ private fun EmptyFavoritesState() {
                                 modifier = Modifier.size(20.dp)
                             )
                             Text(
-                                text = "Filmleri keşfetmeye başlayın!",
+                                text = stringResource(Res.string.empty_instruction),
                                 style = MaterialTheme.typography.labelLarge.copy(
                                     fontWeight = FontWeight.SemiBold
                                 ),
@@ -306,7 +316,7 @@ private fun FavoriteMoviesGrid(
             var showDeleteDialog by remember { mutableStateOf(false) }
 
             LaunchedEffect(movie) {
-                delay(index * 100L) // Staggered animation
+                delay(index * 100L)
                 isVisible = true
             }
 
@@ -333,7 +343,7 @@ private fun FavoriteMoviesGrid(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = "Favorilerden Çıkar",
+                        contentDescription = stringResource(Res.string.remove_from_favorites_description),
                         tint = Color.White,
                         modifier = Modifier
                             .padding(8.dp)
@@ -346,7 +356,7 @@ private fun FavoriteMoviesGrid(
                         onDismissRequest = { showDeleteDialog = false },
                         title = {
                             Text(
-                                text = "🗑️ Favorilerden Çıkar",
+                                text = stringResource(Res.string.remove_from_favorites),
                                 style = MaterialTheme.typography.titleLarge.copy(
                                     fontWeight = FontWeight.Bold
                                 ),
@@ -355,7 +365,10 @@ private fun FavoriteMoviesGrid(
                         },
                         text = {
                             Text(
-                                text = "\"${movie.title}\" filmini favorilerden çıkarmak istediğinizden emin misiniz?",
+                                text = stringResource(
+                                    Res.string.dialog_message,
+                                    movie.title.toString()
+                                ),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = AppColors.onSurfaceVariant
                             )
@@ -372,7 +385,7 @@ private fun FavoriteMoviesGrid(
                                 shape = RoundedCornerShape(12.dp)
                             ) {
                                 Text(
-                                    text = "Çıkar",
+                                    text = stringResource(Res.string.remove_button),
                                     fontWeight = FontWeight.SemiBold,
                                     color = Color.White
                                 )
@@ -384,7 +397,7 @@ private fun FavoriteMoviesGrid(
                                 shape = RoundedCornerShape(12.dp)
                             ) {
                                 Text(
-                                    text = "İptal",
+                                    text = stringResource(Res.string.cancel_button),
                                     color = AppColors.onSurfaceVariant,
                                     fontWeight = FontWeight.Medium
                                 )

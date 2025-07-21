@@ -43,6 +43,16 @@ import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.HomeUiState
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.HomeViewModel
 import moe.tlaster.precompose.viewmodel.viewModel
+import movieappkmp.composeapp.generated.resources.Res
+import movieappkmp.composeapp.generated.resources.home_subtitle
+import movieappkmp.composeapp.generated.resources.home_title
+import movieappkmp.composeapp.generated.resources.loading_movies
+import movieappkmp.composeapp.generated.resources.movies_count
+import movieappkmp.composeapp.generated.resources.no_movies
+import movieappkmp.composeapp.generated.resources.now_playing_title
+import movieappkmp.composeapp.generated.resources.top_rated_title
+import movieappkmp.composeapp.generated.resources.upcoming_title
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -92,7 +102,7 @@ internal fun HomeScreenContent(
                         modifier = Modifier.size(48.dp)
                     )
                     Text(
-                        text = "Filmler yükleniyor...",
+                        text = stringResource(Res.string.loading_movies),
                         style = MaterialTheme.typography.bodyLarge,
                         color = AppColors.onSurfaceVariant
                     )
@@ -109,7 +119,7 @@ internal fun HomeScreenContent(
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
                     ) {
                         Text(
-                            text = "🎬 Film Dünyası",
+                            text = stringResource(Res.string.home_title),
                             style = MaterialTheme.typography.headlineLarge.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 28.sp
@@ -117,7 +127,7 @@ internal fun HomeScreenContent(
                             color = AppColors.onSurface
                         )
                         Text(
-                            text = "En popüler filmleri keşfedin",
+                            text = stringResource(Res.string.home_subtitle),
                             style = MaterialTheme.typography.bodyLarge,
                             color = AppColors.onSurfaceVariant
                         )
@@ -126,8 +136,11 @@ internal fun HomeScreenContent(
 
                 item {
                     MovieSection(
-                        title = "🏆 En Çok Beğenilenler",
-                        subtitle = "${uiState.topRatedMovies.size} film",
+                        title = stringResource(Res.string.top_rated_title),
+                        subtitle = stringResource(
+                            Res.string.movies_count,
+                            uiState.topRatedMovies.size
+                        ),
                         movies = uiState.topRatedMovies,
                         gradientColor = AppColors.primary,
                         onMovieClick = { movie ->
@@ -138,8 +151,11 @@ internal fun HomeScreenContent(
 
                 item {
                     MovieSection(
-                        title = "🚀 Yakında Gelecekler",
-                        subtitle = "${uiState.upcomingMovies.size} film",
+                        title = stringResource(Res.string.upcoming_title),
+                        subtitle = stringResource(
+                            Res.string.movies_count,
+                            uiState.upcomingMovies.size
+                        ),
                         movies = uiState.upcomingMovies,
                         gradientColor = AppColors.secondary,
                         onMovieClick = { movie ->
@@ -150,8 +166,11 @@ internal fun HomeScreenContent(
 
                 item {
                     MovieSection(
-                        title = "🎭 Vizyondakiler",
-                        subtitle = "${uiState.nowPlayingMovies.size} film",
+                        title = stringResource(Res.string.now_playing_title),
+                        subtitle = stringResource(
+                            Res.string.movies_count,
+                            uiState.nowPlayingMovies.size
+                        ),
                         movies = uiState.nowPlayingMovies,
                         gradientColor = AppColors.accent,
                         onMovieClick = { movie ->
@@ -279,7 +298,7 @@ fun MovieSection(
                             fontSize = 32.sp
                         )
                         Text(
-                            text = "Henüz film yok",
+                            text = stringResource(Res.string.no_movies),
                             style = MaterialTheme.typography.bodyMedium,
                             color = AppColors.onSurfaceVariant
                         )

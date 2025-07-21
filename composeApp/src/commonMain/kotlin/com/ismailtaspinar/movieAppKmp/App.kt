@@ -22,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +53,7 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.path
 import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.navigation.transition.NavTransition
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -205,7 +205,7 @@ private fun ModernNavigationBar(
                     ) {
                         Icon(
                             imageVector = item.icon,
-                            contentDescription = item.title,
+                            contentDescription = stringResource(item.title),
                             modifier = Modifier
                                 .scale(iconScale)
                                 .padding(4.dp),
@@ -218,7 +218,7 @@ private fun ModernNavigationBar(
                 },
                 label = {
                     Text(
-                        text = item.title,
+                        text = stringResource(item.title),
                         color = if (isSelected)
                             AppColors.primary
                         else

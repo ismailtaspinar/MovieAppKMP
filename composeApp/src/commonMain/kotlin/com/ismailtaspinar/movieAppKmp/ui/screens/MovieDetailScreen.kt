@@ -63,6 +63,24 @@ import com.ismailtaspinar.movieAppKmp.ui.viewModel.MovieDetailUiState
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.MovieDetailViewModel
 import com.ismailtaspinar.movieAppKmp.utils.extension.formatToOneDecimal
 import moe.tlaster.precompose.viewmodel.viewModel
+import movieappkmp.composeapp.generated.resources.Res
+import movieappkmp.composeapp.generated.resources.add_to_favorites
+import movieappkmp.composeapp.generated.resources.adult
+import movieappkmp.composeapp.generated.resources.back
+import movieappkmp.composeapp.generated.resources.image_failed
+import movieappkmp.composeapp.generated.resources.language
+import movieappkmp.composeapp.generated.resources.loading_image
+import movieappkmp.composeapp.generated.resources.loading_movie
+import movieappkmp.composeapp.generated.resources.movie_details
+import movieappkmp.composeapp.generated.resources.movie_not_available
+import movieappkmp.composeapp.generated.resources.movie_not_found
+import movieappkmp.composeapp.generated.resources.movie_summary
+import movieappkmp.composeapp.generated.resources.no_summary
+import movieappkmp.composeapp.generated.resources.original_title
+import movieappkmp.composeapp.generated.resources.popularity
+import movieappkmp.composeapp.generated.resources.remove_from_favorites
+import movieappkmp.composeapp.generated.resources.voted_by_people
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -127,7 +145,7 @@ internal fun MovieDetailScreenContent(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Geri",
+                                contentDescription = stringResource(Res.string.back),
                                 tint = AppColors.onSurface
                             )
                         }
@@ -170,9 +188,9 @@ internal fun MovieDetailScreenContent(
                             else
                                 Icons.Default.FavoriteBorder,
                             contentDescription = if (uiState.isFavorite)
-                                "Favorilerden Çıkar"
+                                stringResource(Res.string.remove_from_favorites)
                             else
-                                "Favorilere Ekle",
+                                stringResource(Res.string.add_to_favorites),
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -195,7 +213,7 @@ internal fun MovieDetailScreenContent(
                                 modifier = Modifier.size(48.dp)
                             )
                             Text(
-                                text = "Film yükleniyor...",
+                                text = stringResource(Res.string.loading_movie),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = AppColors.onSurfaceVariant
                             )
@@ -224,12 +242,12 @@ internal fun MovieDetailScreenContent(
                                 fontSize = 64.sp
                             )
                             Text(
-                                text = "Film bulunamadı",
+                                text = stringResource(Res.string.movie_not_found),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = AppColors.onSurfaceVariant
                             )
                             Text(
-                                text = "Bu film mevcut değil veya kaldırılmış olabilir",
+                                text = stringResource(Res.string.movie_not_available),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = AppColors.onSurfaceSecondary,
                                 textAlign = TextAlign.Center
@@ -287,7 +305,7 @@ fun MovieDetailContent(
                                     strokeWidth = 3.dp
                                 )
                                 Text(
-                                    text = "Resim yükleniyor...",
+                                    text = stringResource(Res.string.loading_image),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = AppColors.onSurfaceVariant
                                 )
@@ -312,7 +330,7 @@ fun MovieDetailContent(
                                 color = AppColors.onSurfaceVariant
                             )
                             Text(
-                                text = "Resim yüklenemedi",
+                                text = stringResource(Res.string.image_failed),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = AppColors.onSurfaceVariant
                             )
@@ -437,7 +455,7 @@ fun MovieDetailContent(
                         fontSize = 14.sp
                     )
                     Text(
-                        text = "${movie.vote_count} kişi oyladı",
+                        text = stringResource(Res.string.voted_by_people, movie.vote_count ?: 0),
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -449,7 +467,7 @@ fun MovieDetailContent(
             Spacer(modifier = Modifier.height(28.dp))
 
             Text(
-                text = "📖 Film Özeti",
+                text = stringResource(Res.string.movie_summary),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp
@@ -468,7 +486,7 @@ fun MovieDetailContent(
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
             ) {
                 Text(
-                    text = movie.overview ?: "Bu film için özet bilgisi mevcut değil.",
+                    text = movie.overview ?: stringResource(Res.string.no_summary),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         lineHeight = 26.sp,
                         fontSize = 16.sp
@@ -482,7 +500,7 @@ fun MovieDetailContent(
             Spacer(modifier = Modifier.height(28.dp))
 
             Text(
-                text = "ℹ️ Film Detayları",
+                text = stringResource(Res.string.movie_details),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp
@@ -504,10 +522,22 @@ fun MovieDetailContent(
                     modifier = Modifier.padding(24.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    InfoRow("🎭 Orijinal Başlık", movie.original_title ?: "N/A")
-                    InfoRow("🌍 Dil", movie.original_language?.uppercase() ?: "N/A")
-                    InfoRow("📈 Popülerlik", movie.popularity?.formatToOneDecimal() ?: "N/A")
-                    InfoRow("🔞 Yetişkin İçeriği", if (movie.adult == true) "Evet" else "Hayır")
+                    InfoRow(
+                        stringResource(Res.string.original_title),
+                        movie.original_title ?: "N/A"
+                    )
+                    InfoRow(
+                        stringResource(Res.string.language),
+                        movie.original_language?.uppercase() ?: "N/A"
+                    )
+                    InfoRow(
+                        stringResource(Res.string.popularity),
+                        movie.popularity?.formatToOneDecimal() ?: "N/A"
+                    )
+                    InfoRow(
+                        stringResource(Res.string.adult),
+                        if (movie.adult == true) "Evet" else "Hayır"
+                    )
                 }
             }
 

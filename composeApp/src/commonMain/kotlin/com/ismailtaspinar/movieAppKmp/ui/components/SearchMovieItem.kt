@@ -45,6 +45,9 @@ import androidx.compose.ui.unit.sp
 import com.ismailtaspinar.movieAppKmp.data.model.Movie
 import com.ismailtaspinar.movieAppKmp.ui.components.imageLoad.KamelAsyncImage
 import com.ismailtaspinar.movieAppKmp.ui.theme.AppColors
+import movieappkmp.composeapp.generated.resources.Res
+import movieappkmp.composeapp.generated.resources.popular
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
@@ -242,7 +245,7 @@ fun SearchMovieItem(
                         Spacer(modifier = Modifier.width(6.dp))
 
                         Text(
-                            text = "Popular",
+                            text = stringResource(Res.string.popular),
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 12.sp

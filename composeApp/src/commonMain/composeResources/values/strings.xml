@@ -1,0 +1,72 @@
+<resources>
+    <string name="popular">Popular</string>
+
+    <string name="home_tab">Home</string>
+    <string name="search_tab">Search</string>
+    <string name="favorites_tab">Favorites</string>
+
+
+    <!-- Favorites Screen -->
+    <string name="favorites_title">My Favorite Movies</string>
+    <string name="favorites_subtitle">Movies you liked</string>
+    <string name="empty_title">You don’t have any favorite movies yet</string>
+    <string name="empty_description">You can add movies to your favorites by tapping the heart icon on the movie detail page</string>
+    <string name="empty_instruction">Start discovering movies!</string>
+    <string name="dialog_title">🗑️ Remove from Favorites</string>
+    <string name="dialog_message">Are you sure you want to remove "%1$s" from your favorites?</string>
+    <string name="remove_button">Remove</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="remove_from_favorites_description">Remove from favorites</string>
+    <!-- end Favorites Screen -->
+
+    <!-- HomeScreen Strings Start -->
+    <string name="loading_movies">Loading movies...</string>
+    <string name="home_title">🎬 Movie World</string>
+    <string name="home_subtitle">Discover the most popular movies</string>
+    <string name="top_rated_title">🏆 Top Rated</string>
+    <string name="upcoming_title">🚀 Coming Soon</string>
+    <string name="now_playing_title">🎭 Now Playing</string>
+    <string name="no_movies">No movies yet</string>
+    <string name="movies_count">%1$d movies</string>"
+    <!-- HomeScreen Strings End -->
+
+
+    <!-- MovieDetailScreen Strings Start -->
+    <string name="back">Back</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="loading_movie">Loading movie...</string>
+    <string name="movie_not_found">Movie not found</string>
+    <string name="movie_not_available">This movie might not exist or has been removed</string>
+    <string name="loading_image">Loading image...</string>
+    <string name="image_failed">Image could not be loaded</string>
+    <string name="voted_by_people">%1$d votes</string>
+    <string name="movie_summary">📖 Movie Summary</string>
+    <string name="no_summary">No summary available for this movie.</string>
+    <string name="movie_details">ℹ️ Movie Details</string>
+    <string name="original_title">🎭 Original Title</string>
+    <string name="language">🌍 Language</string>
+    <string name="popularity">📈 Popularity</string>
+    <string name="adult">🔞 Adult Content</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="release_date_icon">📅</string>
+    <string name="rating_icon">⭐</string>
+    <string name="vote_icon">👥</string>
+    <!-- MovieDetailScreen Strings End -->
+
+    <!-- SearchScreen Strings Start -->
+    <string name="search_title">🔍 Search Movies</string>
+    <string name="search_subtitle">Find your favorite films</string>
+    <string name="search_field_label">Enter movie name...</string>
+    <string name="search_icon_desc">Search</string>
+    <string name="clear_icon_desc">Clear</string>
+    <string name="searching">Searching...</string>
+    <string name="empty_state_title">🎬 Ready to Discover Movies?</string>
+    <string name="empty_state_description">Enter a movie name in the search box above</string>
+    <string name="no_results_title">😕 No Results Found</string>
+    <string name="no_results_message">No movies found for "%1$s"</string>
+    <string name="no_results_suggestion">Try different keywords</string>
+    <string name="search_results_title">📋 Search Results</string>
+    <!-- SearchScreen Strings End -->
+</resources>

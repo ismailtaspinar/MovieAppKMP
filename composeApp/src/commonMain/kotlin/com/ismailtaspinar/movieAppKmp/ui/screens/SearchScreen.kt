@@ -59,6 +59,20 @@ import com.ismailtaspinar.movieAppKmp.ui.viewModel.SearchUiState
 import com.ismailtaspinar.movieAppKmp.ui.viewModel.SearchViewModel
 import kotlinx.coroutines.delay
 import moe.tlaster.precompose.viewmodel.viewModel
+import movieappkmp.composeapp.generated.resources.Res
+import movieappkmp.composeapp.generated.resources.clear_icon_desc
+import movieappkmp.composeapp.generated.resources.empty_state_description
+import movieappkmp.composeapp.generated.resources.empty_state_title
+import movieappkmp.composeapp.generated.resources.no_results_message
+import movieappkmp.composeapp.generated.resources.no_results_suggestion
+import movieappkmp.composeapp.generated.resources.no_results_title
+import movieappkmp.composeapp.generated.resources.search_field_label
+import movieappkmp.composeapp.generated.resources.search_icon_desc
+import movieappkmp.composeapp.generated.resources.search_results_title
+import movieappkmp.composeapp.generated.resources.search_subtitle
+import movieappkmp.composeapp.generated.resources.search_title
+import movieappkmp.composeapp.generated.resources.searching
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -101,12 +115,11 @@ internal fun SearchScreenContent(
                 .fillMaxSize()
                 .padding(top = 20.dp)
         ) {
-            // Header Section
             Column(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
                 Text(
-                    text = "🔍 Film Ara",
+                    text = stringResource(Res.string.search_title),
                     style = MaterialTheme.typography.headlineLarge.copy(
                         fontWeight = FontWeight.Bold,
                         fontSize = 28.sp
@@ -114,13 +127,12 @@ internal fun SearchScreenContent(
                     color = AppColors.onSurface
                 )
                 Text(
-                    text = "Favori filmlerinizi bulun",
+                    text = stringResource(Res.string.search_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
                     color = AppColors.onSurfaceVariant
                 )
             }
 
-            // Search TextField Card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -136,14 +148,14 @@ internal fun SearchScreenContent(
                     onValueChange = onSearchQueryChange,
                     label = {
                         Text(
-                            "Film adı girin...",
+                            text = stringResource(Res.string.search_field_label),
                             color = AppColors.onSurfaceVariant
                         )
                     },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Ara",
+                            contentDescription = stringResource(Res.string.search_icon_desc),
                             tint = AppColors.primary
                         )
                     },
@@ -154,7 +166,7 @@ internal fun SearchScreenContent(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Clear,
-                                    contentDescription = "Temizle",
+                                    contentDescription = stringResource(Res.string.clear_icon_desc),
                                     tint = AppColors.onSurfaceVariant
                                 )
                             }
@@ -194,7 +206,7 @@ internal fun SearchScreenContent(
                                     modifier = Modifier.size(48.dp)
                                 )
                                 Text(
-                                    text = "Aranıyor...",
+                                    text = stringResource(Res.string.searching),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = AppColors.onSurfaceVariant
                                 )
@@ -257,7 +269,7 @@ private fun EmptySearchState() {
                         fontSize = 64.sp
                     )
                     Text(
-                        text = "Film Keşfetmeye Hazır mısın?",
+                        text = stringResource(Res.string.empty_state_title),
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold
                         ),
@@ -265,7 +277,7 @@ private fun EmptySearchState() {
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "Arama yapmak için yukarıdaki kutucuğa film adı girin",
+                        text = stringResource(Res.string.empty_state_description),
                         style = MaterialTheme.typography.bodyMedium,
                         color = AppColors.onSurfaceVariant,
                         textAlign = TextAlign.Center
@@ -299,7 +311,7 @@ private fun NoResultsState(searchQuery: String) {
                     fontSize = 64.sp
                 )
                 Text(
-                    text = "Sonuç Bulunamadı",
+                    text = stringResource(Res.string.no_results_title),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold
                     ),
@@ -307,13 +319,13 @@ private fun NoResultsState(searchQuery: String) {
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "\"$searchQuery\" için film bulunamadı",
+                    text = stringResource(Res.string.no_results_message, searchQuery),
                     style = MaterialTheme.typography.bodyMedium,
                     color = AppColors.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Farklı anahtar kelimeler deneyin",
+                    text = stringResource(Res.string.no_results_suggestion),
                     style = MaterialTheme.typography.bodySmall,
                     color = AppColors.onSurfaceSecondary,
                     textAlign = TextAlign.Center
@@ -346,7 +358,7 @@ private fun SearchResultsList(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "📋 Arama Sonuçları",
+                    text = "${stringResource(Res.string.search_results_title)} (${results.size})",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),
