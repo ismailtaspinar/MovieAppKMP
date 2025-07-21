@@ -391,9 +391,9 @@ The project is ready for continuous integration with:
 
 ## 📱 Screenshots
 
-| Home Screen | Search | Movie Detail | Favorites |
-|-------------|---------|--------------|-----------|
-| Browse popular movies | Real-time search | Detailed information | Manage favorites |
+| Home Screen (And) | Search (Ios) | Movie Detail (Ios) | Favorites (Ios) |
+|-------------|--------|--------------|-----------|
+| <img src="screenshots/home.png" width="180"/> | <img src="screenshots/search.png" width="180"/> | <img src="screenshots/movie detail.png" width="180"/> | <img src="screenshots/favorites.png" width="180"/>
 
 ## 🔮 Future Enhancements
 
