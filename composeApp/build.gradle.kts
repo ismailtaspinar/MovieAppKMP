@@ -107,9 +107,9 @@ android {
 }
 
 compose.resources {
-    publicResClass = true // Resource class'ları public yapar
-    packageOfResClass = "movieappkmp.composeapp.generated.resources" // Package name
-    generateResClass = always // Her zaman generate et
+    publicResClass = true
+    packageOfResClass = "movieappkmp.composeapp.generated.resources"
+    generateResClass = always
 }
 
 dependencies {
